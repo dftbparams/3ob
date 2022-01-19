@@ -1,0 +1,30 @@
+Geometry = GenFormat {
+  <<< "struc.gen"
+}
+
+Hamiltonian = DFTB {
+  SCC = Yes
+  SCCTolerance = 1.00E-8
+  MaxAngularMomentum {
+    H = "s"
+    C = "p"
+  }
+  MaxSCCIterations = 250
+  HubbardDerivs {
+    H = -0.1857
+    C = -0.1492
+  }
+  ThirdOrder = Yes
+  HCorrection = Damping {
+    Exponent = 4.0
+  }
+  SlaterKosterFiles = Type2FileNames {
+    Separator = "-"
+    Suffix = ".skf"
+  }
+}
+
+Options { WriteAutotestTag = Yes }
+Analysis { CalculateForces = Yes }
+ParserOptions { ParserVersion = 10 }
+Parallel { UseOmpThreads = Yes }

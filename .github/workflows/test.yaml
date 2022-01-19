@@ -1,0 +1,37 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup DFTB+
+      uses: mamba-org/provision-with-micromamba@main
+      with:
+        environment-file: environment.yaml
+
+    - name: Run regression tests
+      run: |
+        set -ex
+        compare="python $PWD/test/tools"
+        export DFTBPLUS_PARAM_DIR=$PWD/skfiles
+        for test in $(find test -name dftb_in.hsd | sort -n)
+        do
+          pushd $(dirname $test)
+          dftb+
+          for data in autotest results; do
+            if [ -f _$data.tag ]; then
+              $compare {_,}$data.tag
+            fi
+          done
+          popd
+        done

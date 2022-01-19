@@ -1,0 +1,7 @@
+name: dftbplus
+channels:
+  - conda-forge
+dependencies:
+  - dftbplus
+  - python
+  - numpy
